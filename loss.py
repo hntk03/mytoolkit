@@ -27,3 +27,16 @@ class LSRLoss(nn.Module):
         q = q.to(device)
         
         return F.kl_div(output, q, reduction='batchmean')
+
+class NCrossEntropy(nn.Module):
+    '''
+        Cross Entropy Loss
+        output : (batchsize x K) by predicter
+        target : supervised One-hot label 
+    '''
+    
+    def __init__(self):
+        super(NCrossEntropy, self).__init__()
+    
+    def forward(self, output, target):
+        return - (F.log_softmax(output, dim=1) * target).sum(dim=1).mean()
