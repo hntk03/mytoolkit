@@ -21,7 +21,7 @@ class FreqMask(object):
     def __call__(self, data):
         
         data = data.copy()
-        upsilon = data.shape[1]
+        upsilon = data.shape[0]
         f = np.random.randint(0, self.F)
         f0 = np.random.randint(0, upsilon-f)
         

@@ -1,6 +1,8 @@
 
-from .loss import *
-from .augment import *
+from . import (
+        loss,
+        augment,
+        )
 
 def test():
     print('test')
