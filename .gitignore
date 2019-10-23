@@ -6,3 +6,8 @@ __pycache__
 # Microsoft Backup files
 ~$*.doc*
 ~$*.ppt*
+
+# build
+/build
+/dist
+/pytoolkit.egg-info
