@@ -21,7 +21,6 @@ class LSRLoss(nn.Module):
         
         device = output.device.type + ':' +str(output.device.index)
         output = F.log_softmax(output, dim=1)
-        batch_size = output.size()[0]
         delta = torch.eye(self.num_classes)[target]
         q = (1- self.epsilon) * delta + self.epsilon * self.u_k
         q = q.to(device)
