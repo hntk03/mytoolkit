@@ -38,7 +38,6 @@ class FreqMask(object):
         return data
 
 
-
 class TimeMask(object):
     
     ''' 
@@ -70,3 +69,55 @@ class TimeMask(object):
             data[:, t0:tmax, :] = 0
             
         return data
+
+class RandomErasing(object):
+
+    '''
+    https://arxiv.org/pdf/1708.04896.pdf
+    '''
+   
+    def __init__(self, p=0.5, sl=0.02, sh=0.4, r1=0.3, r2=3.3, mask_mode='zero'):
+
+        self.p = p
+        self.sl = sl
+        self.sh = sh
+        self.r1 = r1
+        self.r2 = r2
+
+        assert mask_mode == 'zero' or mask_mode == 'random'
+        self.mask_mode = mask_mode
+
+    def __call__(self, data):
+        data = data.copy()
+
+        if self.p >= np.random.random():
+            return data
+
+
+        H, W, C = data.shape
+        S = H * W
+
+        while True:
+            Se = np.random.uniform(self.sl, self.sh) * S
+            re = np.random.uniform(self.r1, self.r2)
+            
+
+            He = int(np.sqrt(Se*re))
+            We = int(np.sqrt(Se/re));
+
+            xe = np.random.randint(0, W)
+            ye = np.random.randint(0, H)
+
+            if((xe + We <= W) and (ye + He) <= H):
+                break
+        if self.mask_mode == 'zero' :
+            mask = np.zeros((He, We, C), dtype='float32')
+        elif self.mask_mode == 'random':
+            mask = np.random.randint(0, 255, (He, We, C))
+
+        data[ye:ye + He, xe:xe + We, :] = mask
+
+        return data
+
+
+
